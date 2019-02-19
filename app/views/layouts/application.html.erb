@@ -1,15 +1,113 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Blazar</title>
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<head>
+  <title>Blazar</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <meta name="google-signin-scope" content="profile email">
+  <meta name="google-signin-client_id" content="897388283939-phde91q4cfggslskp1u3dog78pdgclqp.apps.googleusercontent.com">
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  <%= stylesheet_link_tag 'application', '/stylesheets/flight.css' %>
+  <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+<body>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-  </head>
+  <div class="menu">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <p>Blazar</p>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li>
+              <span class="text-white">
+                <% if user_signed_in? %>
+                Logged in as <strong><%= current_user.email %></strong>.
+                <%= link_to 'Edit profile', edit_user_registration_path, :class => 'navbar-link' %> |
+                <%= link_to "Logout", destroy_user_session_path, method: :delete, :class => 'navbar-link'  %>
+                <% else %>
+                <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
+                <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
+                <% end %>
+                 <strong><div id="profileinfo"></div></strong>
+              </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
+  <% if notice %>
+  <p class="alert alert-success"><%= notice %></p>
+  <% end %>
+  <% if alert %>
+  <p class="alert alert-danger"><%= alert %></p>
+  <% end %>
+  <%= yield %>
+  <script>
+    function onSignIn(googleUser) {
+      var profile = googleUser.getBasicProfile();
+      document.getElementById('profileinfo').innerHTML = "Logged in as" + " " + profile.getEmail();
+      document.getElementById('avatar').setAttribute("src", profile.getImageUrl())
+      console.log("ID: " + profile.getId());
+      console.log('Full Name: ' + profile.getName());
+      console.log('Given Name: ' + profile.getGivenName());
+      console.log('Family Name: ' + profile.getFamilyName());
+      console.log("Image URL: " + profile.getImageUrl());
+      console.log("Email: " + profile.getEmail());
+      var id_token = googleUser.getAuthResponse().id_token;
+      console.log("ID Token: " + id_token);
 
-  <body>
-    <%= yield %>
-  </body>
+      var myUserEntity = {};
+      myUserEntity.Id = profile.getId();
+      myUserEntity.Name = profile.getName();
+
+  //Store the entity object in sessionStorage where it will be accessible from all pages of your site.
+  sessionStorage.setItem('myUserEntity',JSON.stringify(myUserEntity));
+
+  alert(profile.getName()); 
+}
+</script>
+
+
+
+<script type="text/javascript">
+  function checkIfLoggedIn()
+  {
+    if(sessionStorage.getItem('myUserEntity') == null){
+    //Redirect to login page, no user entity available in sessionStorage
+    window.location.href='Login.html';
+  } else {
+    //User already logged in
+    var userEntity = {};
+    userEntity = JSON.parse(sessionStorage.getItem('myUserEntity'));
+    ...
+    DoWhatever();
+  }
+}
+</script>
+
+<script>
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      sessionStorage.clear();
+      location.href = "/";
+      console.log('User signed out.');
+    });
+  }
+</script>
+<div class="foot-lnk">
+  <p>Developed by : <i class="fa fa-envelope" aria-hidden="true"></i> <a href="mailto:navinkumar2508@gmail.com"><strong>navinkumar2508@gmail.com</strong></a></p>
+</div>
+</body>
 </html>

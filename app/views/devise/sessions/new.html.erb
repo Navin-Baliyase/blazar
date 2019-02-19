@@ -1,0 +1,40 @@
+<div class="login-wrap">
+  <div class="login-html">
+    <input id="tab-1" type="radio" name="tab" class="sign-in" checked><label for="tab-1" class="tab">Sign In</label>
+    <input id="tab-2" type="radio" name="tab" class="for-pwd"><label for="tab-2" class="tab">Google Sign In</label>
+    <div class="login-form">
+      <div class="sign-in-htm">
+
+       <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+       <div class="group">
+        <%= f.label :email %><br />
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "input" %>
+      </div>
+      <div class="group">
+        <%= f.label :password %><br />
+        <%= f.password_field :password, autocomplete: "current-password", class: "input" %>
+      </div>
+      <% if devise_mapping.rememberable? %>
+      <div class="group">
+        <%= f.check_box :remember_me %>
+        <%= f.label :remember_me %>
+      </div>
+      <% end %>
+      <div class="group">
+        <%= f.submit "Log in" , {class: "button"}%>
+      </div>
+      <%end%>
+      <div class="hr"></div>
+    </div>
+    <div class="for-pwd-htm">
+      <div class="d-flex justify-content-center align-items-center" style="height:100px;">
+        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>  <hr>
+        <a href="javascript:void(0)" onclick="signOut();">Google Sign out</a> 
+      </div>
+
+
+      <div class="hr"></div>
+    </div>  
+  </div>
+</div>
+</div>

@@ -38,7 +38,6 @@
                 <%= link_to "Sign up", new_user_registration_path, :class => 'navbar-link'  %> |
                 <%= link_to "Login", new_user_session_path, :class => 'navbar-link'  %>
                 <% end %>
-                 <strong><div id="profileinfo"></div></strong>
               </span>
             </li>
           </ul>
@@ -73,8 +72,6 @@
 
   //Store the entity object in sessionStorage where it will be accessible from all pages of your site.
   sessionStorage.setItem('myUserEntity',JSON.stringify(myUserEntity));
-
-  alert(profile.getName()); 
 }
 </script>
 
@@ -90,8 +87,6 @@
     //User already logged in
     var userEntity = {};
     userEntity = JSON.parse(sessionStorage.getItem('myUserEntity'));
-    ...
-    DoWhatever();
   }
 }
 </script>
